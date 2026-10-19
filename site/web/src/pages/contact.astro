@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Contact">
+  <h1>Request an estimate</h1>
+  <form method="post" action="/api/customers">
+    <label>Name <input name="name" required autocomplete="name" /></label>
+    <label>Email <input name="email" type="email" required autocomplete="email" /></label>
+    <label>Address <input name="street" autocomplete="street-address" /></label>
+    <button type="submit">Send</button>
+  </form>
+</Base>

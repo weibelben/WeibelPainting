@@ -1,0 +1,25 @@
+---
+import '../styles/global.css';
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" />
+    <title>{title} | Weibel Painting</title>
+  </head>
+  <body>
+    <header>
+      <a href="/">Weibel Painting</a>
+      <nav>
+        <a href="/services/">Services</a>
+        <a href="/gallery/">Gallery</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+    </header>
+    <main><slot /></main>
+    <footer>© {new Date().getFullYear()} Weibel Painting</footer>
+  </body>
+</html>
