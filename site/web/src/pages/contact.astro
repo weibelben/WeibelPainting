@@ -2,11 +2,39 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Contact">
-  <h1>Request an estimate</h1>
-  <form method="post" action="/api/customers">
-    <label>Name <input name="name" required autocomplete="name" /></label>
-    <label>Email <input name="email" type="email" required autocomplete="email" /></label>
-    <label>Address <input name="street" autocomplete="street-address" /></label>
-    <button type="submit">Send</button>
-  </form>
+ <h1>Request an estimate</h1>
+ <form method="post" action="/api/customers">
+  <label>Name <input name="name" required maxlength="200" autocomplete="name" /></label>
+  <label>Email <input name="email" type="email" required maxlength="254" autocomplete="email" /></label>
+  <label>Phone <input name="phone" type="tel" maxlength="40" autocomplete="tel" /></label>
+  <label>Street <input name="street" maxlength="200" autocomplete="street-address" /></label>
+  <label>City <input name="city" maxlength="100" autocomplete="address-level2" /></label>
+  <label>State <input name="state" maxlength="50" autocomplete="address-level1" /></label>
+  <label>ZIP <input name="zip" maxlength="20" inputmode="numeric" autocomplete="postal-code" /></label>
+  <label>Project details <textarea name="message" rows="5" maxlength="4000"></textarea></label>
+
+  <div class="hp" aria-hidden="true">
+   <label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+  </div>
+
+  <div class="cf-turnstile" data-sitekey="YOUR_SITE_KEY"></div>
+  <button type="submit">Send</button>
+ </form>
+ <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline></script>
 </Base>
+
+<style>
+ form {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 32rem;
+ }
+ label {
+  display: grid;
+  gap: 0.25rem;
+ }
+ .hp {
+  position: absolute;
+  left: -10000px;
+ }
+</style>
