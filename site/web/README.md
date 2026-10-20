@@ -6,7 +6,6 @@ This project was initiated via
 npm create astro@latest -- --template minimal
 ```
 
-
 ## Project Structure
 
 ```text
