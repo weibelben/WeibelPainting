@@ -50,7 +50,7 @@ func (a *App) createCustomer(w http.ResponseWriter, r *http.Request) {
 		Message: r.PostFormValue("message"),
 	}
 	if err := validate(&c); err != nil {
-		http.Error(w, "Please go back and check your name and email.", http.StatusBadRequest)
+		http.Error(w, "Please go back and check your name, email, and project details.", http.StatusBadRequest)
 		return
 	}
 
