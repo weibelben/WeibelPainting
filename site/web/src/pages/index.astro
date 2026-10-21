@@ -1,7 +1,265 @@
 ---
 import Base from '../layouts/Base.astro';
+import { projects } from '../data/projects.js';
+
+const highlights = [
+  {
+    title: 'Interior Painting',
+    text: 'Walls, ceilings, trim, and doors, with careful prep and clean lines.',
+  },
+  {
+    title: 'Exterior Painting',
+    text: 'Siding and trim prepped and coated to stand up to Pacific Northwest weather.',
+  },
+  {
+    title: 'Cabinets & Specialty',
+    text: 'Cabinet refinishing, staining, and detail work that transforms a room.',
+  },
+];
+
+const recent = projects.slice(0, 3);
 ---
 <Base title="Home">
-  <h1>Interior & exterior painting</h1>
-  <p>Serving the Eastside since 2015</p>
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Serving the Eastside since 2015</p>
+      <h1>Interior &amp; exterior painting, done with <em>care</em> and built to <em>last</em>.</h1>
+      <p class="lead">
+        [A sentence speaking to the customer: a home that needs refreshing, a project you've been putting off.]
+      </p>
+      <p class="lead">
+        [A sentence on what you do and who you do it for: homeowners, remodels, new additions.]
+      </p>
+      <div class="actions">
+        <a class="button" href="/contact/">Get a Free Estimate</a>
+        <a class="button button-outline" href="/services/">Our Services</a>
+      </div>
+    </div>
+    <img class="hero-image" src="<path_to_photo_here>" alt="[Describe the photo]" />
+  </section>
+
+  <section class="section">
+    <p class="eyebrow">What We Do</p>
+    <h2>Painting Services</h2>
+    <ul class="cards">
+      {highlights.map(({ title, text }) => (
+        <li class="card">
+          <h3>{title}</h3>
+          <p>{text}</p>
+        </li>
+      ))}
+    </ul>
+    <a class="more" href="/services/">See all services →</a>
+  </section>
+
+  <section class="section philosophy">
+    <p class="eyebrow">Our Approach</p>
+    <h2>Quality Starts with Preparation</h2>
+    <div class="prose">
+      <p>[How you approach every job: thorough prep, quality materials, respect for the customer's home.]</p>
+      <p>[Why that matters: finishes that last, fewer touch-ups, a clean job site at the end of every day.]</p>
+    </div>
+    <a class="button button-outline" href="/about/">Meet the Team</a>
+  </section>
+
+  {recent.length > 0 && (
+    <section class="section">
+      <p class="eyebrow">Recent Work</p>
+      <h2>From the Gallery</h2>
+      <ul class="projects">
+        {recent.map((project) => (
+          <li>
+            <a class="project" href={`/gallery/${project.slug}/`}>
+              <img src={project.cover} alt="" loading="lazy" />
+              <span class="project-overlay">
+                <span class="project-category">{project.category}</span>
+                <span class="project-title">{project.title}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a class="more" href="/gallery/">View the full gallery →</a>
+    </section>
+  )}
+
+  <section class="cta">
+    <h2>Ready to start your project?</h2>
+    <p>Tell us what you have in mind and we'll schedule a free, no-obligation estimate.</p>
+    <a class="button" href="/contact/">Request an Estimate</a>
+  </section>
 </Base>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    padding-block: 1rem 2rem;
+  }
+  h1 {
+    font-size: clamp(2.25rem, 5.5vw, 3.5rem);
+    line-height: 1.1;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--brand);
+  }
+  .lead {
+    margin: 0 0 1rem;
+    font-size: 1.15rem;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .button-outline {
+    color: var(--brand);
+    background: transparent;
+    box-shadow: inset 0 0 0 2px var(--brand);
+  }
+  .button-outline:hover {
+    color: #fff;
+    background: var(--brand);
+  }
+  .hero-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background: var(--line);
+    border-radius: 16px;
+  }
+  .section {
+    margin-top: 4.5rem;
+    padding-top: 3.5rem;
+    border-top: 1px solid var(--line);
+  }
+  h2 {
+    margin: 0 0 1.75rem;
+    font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+    line-height: 1.2;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .card {
+    padding: 1.75rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--brand);
+    border-radius: 12px;
+  }
+  .card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+  }
+  .card p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .more {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-weight: 600;
+    color: var(--brand);
+    text-decoration: none;
+  }
+  .more:hover {
+    text-decoration: underline;
+  }
+  .philosophy .prose {
+    max-width: 46rem;
+    margin-bottom: 1.75rem;
+  }
+  .projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .project {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    color: #fff;
+    text-decoration: none;
+    background: var(--line);
+    border-radius: 12px;
+  }
+  .project img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .project:hover img,
+  .project:focus-visible img {
+    transform: scale(1.05);
+  }
+  .project-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.25rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent 60%);
+  }
+  .project-category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+  .project-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .cta {
+    margin-top: 4.5rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    color: #fff;
+    background: var(--brand);
+    border-radius: 16px;
+  }
+  .cta h2 {
+    margin-bottom: 0.75rem;
+  }
+  .cta p {
+    max-width: 36rem;
+    margin: 0 auto 1.75rem;
+    opacity: 0.9;
+  }
+  .cta .button {
+    color: var(--brand);
+    background: #fff;
+  }
+  .cta .button:hover {
+    background: #eef2f5;
+  }
+  @media (max-width: 800px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+    .hero-image {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

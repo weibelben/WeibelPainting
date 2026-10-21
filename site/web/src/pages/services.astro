@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+
+const services = [
+  'Interior painting: walls, ceilings, trim, and doors',
+  'Exterior painting: siding, trim, and fascia',
+  'Cabinet refinishing',
+  'Drywall repair and surface prep',
+  'Deck and fence staining',
+  'Color consultation',
+];
+---
+<Base title="Services">
+  <article class="services">
+    <p class="eyebrow">What We Do</p>
+    <h1>Painting Services</h1>
+
+    <div class="prose">
+      <p>[Who you work with: homeowners, property managers, builders, and the area you serve.]</p>
+      <p>[What sets you apart: licensed and insured, quality materials, clean job sites.]</p>
+    </div>
+
+    <section>
+      <h2>Our Services</h2>
+      <ul class="service-list">
+        {services.map((service) => <li>{service}</li>)}
+      </ul>
+    </section>
+
+    <figure class="banner">
+      <img src="<path_to_photo_here>" alt="[Describe the photo]" />
+      <figcaption>Prep · Paint · Protect</figcaption>
+    </figure>
+
+    <section class="prose">
+      <h2>Our Process</h2>
+      <p>[How an estimate works: site visit, measurements, written quote.]</p>
+      <p>[How you prep surfaces and choose materials, and why it matters for how long the finish lasts.]</p>
+    </section>
+
+    <section class="prose">
+      <h2>What to Expect</h2>
+      <p>[A sentence on how you keep customers informed throughout a project.]</p>
+
+      <h3>Before We Start</h3>
+      <p>[Color selection, scheduling, moving furniture, protecting floors and landscaping.]</p>
+
+      <h3>During the Project</h3>
+      <p>[Daily schedule, communication, keeping the work area clean.]</p>
+
+      <h3>After We Finish</h3>
+      <p>[Final walkthrough, touch-ups, leftover paint, warranty.]</p>
+    </section>
+
+    <section class="cta">
+      <h2>Ready to get started?</h2>
+      <p>Tell us about your project and we'll schedule a free estimate.</p>
+      <a class="button" href="/contact/">Request an Estimate</a>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .services {
+    max-width: 52rem;
+    margin: 0 auto;
+  }
+  h2 {
+    margin: 3rem 0 1rem;
+    font-size: 1.6rem;
+  }
+  h3 {
+    margin: 1.75rem 0 0.5rem;
+    font-size: 1.15rem;
+  }
+  .service-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 0.75rem 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .service-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    font-size: 1.0625rem;
+  }
+  .service-list li::before {
+    content: '';
+    position: absolute;
+    top: 0.55em;
+    left: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--brand);
+    border-radius: 50%;
+  }
+  .banner {
+    margin: 3rem 0 0;
+  }
+  .banner img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    object-fit: cover;
+    background: var(--line);
+    border-radius: 14px;
+  }
+  .banner figcaption {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-align: center;
+    color: var(--brand);
+  }
+  .cta {
+    margin-top: 3.5rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .cta h2 {
+    margin-top: 0;
+  }
+  .cta p {
+    margin: 0 0 1.5rem;
+    color: var(--muted);
+  }
+  @media (max-width: 600px) {
+    .banner img {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

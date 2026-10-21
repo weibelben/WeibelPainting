@@ -1,0 +1,109 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const team = [
+  { href: '/about/ben/', name: 'Ben', role: 'Co-Owner, heights specialist, perfect line cutter, great at following instructions', photo: '/images/kirk_profile.jpg' },
+  { href: '/about/david/', name: 'David', role: 'Co-Owner, masking expert, roller extraordinaire, extremely fast at navigating crawlspaces', photo: '/images/david_profile.jpg' },
+  { href: '/about/kirk/', name: 'Kirk', role: 'Co-Owner, tiling pro, sturdiest ladder holder', photo: '/images/kirk_profile.jpg' },
+];
+---
+<Base title="About">
+  <section class="about">
+    <p class="eyebrow">Who We Are</p>
+    <h1>About Weibel Painting</h1>
+
+    <div class="prose">
+      <p>[How the business started, how long you've been painting, and the area you serve.]</p>
+      <p>[What you specialize in: interior, exterior, cabinets, commercial, prep and repair work.]</p>
+      <p>[What customers can expect: communication, cleanliness, materials, warranty.]</p>
+    </div>
+
+    <h2>Meet the Team</h2>
+    <ul class="team">
+      {team.map(({ href, name, role, photo }) => (
+        <li>
+          <a class="member" href={href}>
+            <img src={photo} alt={`Portrait of ${name}`} loading="lazy" />
+            <span class="name">{name}</span>
+            <span class="role">{role}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .about {
+    max-width: 56rem;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brand);
+  }
+  h1 {
+    margin: 0 0 1.5rem;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.15;
+  }
+  .prose {
+    max-width: 48rem;
+  }
+  .prose p {
+    margin: 0 0 1.1rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+  h2 {
+    margin: 3rem 0 1.25rem;
+    padding-top: 2rem;
+    font-size: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .team {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .member {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1rem;
+    color: inherit;
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .member:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+  .member img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    margin-bottom: 0.85rem;
+    background: var(--line);
+    border-radius: 8px;
+  }
+  .name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--brand);
+  }
+  .role {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+</style>

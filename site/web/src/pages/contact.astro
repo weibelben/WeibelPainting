@@ -1,40 +1,193 @@
 ---
 import Base from '../layouts/Base.astro';
+
+const turnstileSiteKey = import.meta.env.DEV
+  ? '1x00000000000000000000AA'
+  : '0x4AAAAAAFay56FWCpTNU7n1';
 ---
 <Base title="Contact">
- <h1>Request an estimate</h1>
- <form method="post" action="/api/customers">
-  <label>Name <input name="name" required maxlength="200" autocomplete="name" /></label>
-  <label>Email <input name="email" type="email" required maxlength="254" autocomplete="email" /></label>
-  <label>Phone <input name="phone" type="tel" maxlength="40" autocomplete="tel" /></label>
-  <label>Street <input name="street" maxlength="200" autocomplete="street-address" /></label>
-  <label>City <input name="city" maxlength="100" autocomplete="address-level2" /></label>
-  <label>State <input name="state" maxlength="50" autocomplete="address-level1" /></label>
-  <label>ZIP <input name="zip" maxlength="20" inputmode="numeric" autocomplete="postal-code" /></label>
-  <label>Project details <textarea name="message" rows="5" maxlength="4000"></textarea></label>
+  <section class="contact">
+    <p class="eyebrow">Let's Connect</p>
+    <h1>Request an Estimate</h1>
+    <p class="intro">
+      Tell us a little about your project and we'll follow up to schedule a 
+      free, no-obligation estimate.
+    </p>
 
-  <div class="hp" aria-hidden="true">
-   <label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
-  </div>
+    <div class="card">
+      <h2>Estimate Request Form</h2>
+      <p class="note">Fields marked with <span class="req">*</span> are required.</p>
 
-  <div class="cf-turnstile" data-sitekey="YOUR_SITE_KEY"></div>
-  <button type="submit">Send</button>
- </form>
- <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline></script>
+      <form method="post" action="/api/customers">
+        <div class="field">
+          <label for="name">Name <span class="req">*</span></label>
+          <input id="name" name="name" required maxlength="200" autocomplete="name" />
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="email">Email Address <span class="req">*</span></label>
+            <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="phone">Phone Number</label>
+            <input id="phone" name="phone" type="tel" maxlength="40" autocomplete="tel" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="street">Street Address</label>
+          <input id="street" name="street" maxlength="200" autocomplete="street-address" />
+        </div>
+
+        <div class="row row-3">
+          <div class="field">
+            <label for="city">City</label>
+            <input id="city" name="city" maxlength="100" autocomplete="address-level2" />
+          </div>
+          <div class="field">
+            <label for="state">State</label>
+            <input id="state" name="state" maxlength="50" autocomplete="address-level1" />
+          </div>
+          <div class="field">
+            <label for="zip">ZIP</label>
+            <input id="zip" name="zip" maxlength="20" inputmode="numeric" autocomplete="postal-code" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="message">Project Details</label>
+          <p class="help" id="message-help">
+            Interior or exterior, rooms or surfaces, approximate size, and when you'd like the work done.
+          </p>
+          <textarea id="message" name="message" rows="6" maxlength="4000" aria-describedby="message-help"></textarea>
+        </div>
+
+        <div class="hp" aria-hidden="true">
+          <label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+        </div>
+
+        <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+
+        <button type="submit">Submit Request</button>
+      </form>
+    </div>
+  </section>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline></script>
 </Base>
 
 <style>
- form {
-  display: grid;
-  gap: 0.75rem;
-  max-width: 32rem;
- }
- label {
-  display: grid;
-  gap: 0.25rem;
- }
- .hp {
-  position: absolute;
-  left: -10000px;
- }
+  .contact {
+    --accent: var(--brand);
+    --accent-dark: #2c4356;
+    --border: #d4dbe1;
+    --muted: #55606b;
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.15;
+  }
+  .intro {
+    margin: 0 0 2rem;
+    font-size: 1.125rem;
+    color: var(--muted);
+  }
+  .card {
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+  .card h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1.5rem;
+  }
+  .note {
+    margin: 0 0 1.5rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  form {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  .row-3 {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  @media (max-width: 600px) {
+    .row,
+    .row-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+  .field {
+    display: grid;
+    gap: 0.375rem;
+  }
+  label {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .help {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    font: inherit;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  input:focus,
+  textarea:focus {
+    border-color: var(--accent);
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  textarea {
+    min-height: 8rem;
+    resize: vertical;
+  }
+  .req {
+    color: #b42318;
+  }
+  button {
+    justify-self: start;
+    padding: 0.85rem 1.75rem;
+    font: inherit;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: var(--accent-dark);
+  }
+  .hp {
+    position: absolute;
+    left: -10000px;
+  }
 </style>
