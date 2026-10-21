@@ -36,7 +36,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	app := &App{db: db, log: log, turnstileSecret: secret}
+	mailer, err := mailerFromEnv()
+	if err != nil {
+		log.Error("email config", "err", err)
+		os.Exit(1)
+	}
+	if mailer == nil {
+		log.Warn("SMTP_HOST not set; inquiry emails disabled")
+	}
+
+	app := &App{db: db, log: log, turnstileSecret: secret, mailer: mailer}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /api/inquiries", app.createInquiry)
@@ -68,4 +77,5 @@ func main() {
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Error("shutdown", "err", err)
 	}
+	app.notifications.Wait()
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"log/slog"
 	"net/http"
+	"sync"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -12,6 +13,8 @@ type App struct {
 	db       *gorm.DB
 	log       *slog.Logger
 	turnstileSecret string
+	mailer          *mailer
+	notifications   sync.WaitGroup
 }
 
 const maxFormBytes = 64 << 10
@@ -69,6 +72,13 @@ func (a *App) createInquiry(w http.ResponseWriter, r *http.Request) {
 	}
 
 	a.log.Info("inquiry created", "id", c.ID)
+	if a.mailer != nil {
+		a.notifications.Go(func() {
+			if err := a.mailer.sendInquiry(&c); err != nil {
+				a.log.Error("send inquiry email", "id", c.ID, "err", err)
+			}
+		})
+	}
 	http.Redirect(w, r, "/thanks/", http.StatusSeeOther)
 }
 
