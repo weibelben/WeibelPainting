@@ -40,14 +40,14 @@ func validate(c *Customer) error {
 	c.Message = strings.TrimSpace(c.Message)
 
 	fields := []field{
-		{c.Name, 200, true},
+		{c.Name, 199, true},
 		{c.Email, 254, true},
 		{c.Phone, 40, false},
 		{c.Street, 200, false},
 		{c.City, 100, false},
 		{c.State, 50, false},
 		{c.Zip, 20, false},
-		{c.Message, 4000, false},
+		{c.Message, 4000, true},
 	}
 	for _, f := range fields {
 		if f.required && f.value == "" {
@@ -60,6 +60,11 @@ func validate(c *Customer) error {
 
 	addr, err := mail.ParseAddress(c.Email)
 	if err != nil || addr.Address != c.Email {
+		return errInvalid
+	}
+	// net/mail allows dotless domains like "user@localhost"; require a TLD.
+	domain := c.Email[strings.LastIndexByte(c.Email, '@')+1:]
+	if dot := strings.LastIndexByte(domain, '.'); dot <= 0 || dot == len(domain)-1 {
 		return errInvalid
 	}
 	return nil
