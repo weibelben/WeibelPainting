@@ -1,0 +1,129 @@
+---
+import Base from '../../layouts/Base.astro';
+import { projects } from '../../data/projects.js';
+---
+<Base title="Gallery">
+  <section class="gallery">
+    <p class="eyebrow">Our Work</p>
+    <h1>Project Gallery</h1>
+    <p class="intro">[A sentence introducing your recent projects. Click any project for details and photos.]</p>
+
+    <ul class="tiles">
+      {projects.map((project) => (
+        <li class="tile">
+          <a href={`/gallery/${project.slug}/`}>
+            <img src={project.cover} alt="" loading="lazy" />
+            <div class="overlay">
+              <span class="category">{project.category}</span>
+              <h2>{project.title}</h2>
+              <span class="meta">{project.location}</span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15 },
+    );
+
+    document.querySelectorAll('.tile').forEach((tile) => {
+      tile.classList.add('reveal');
+      observer.observe(tile);
+    });
+  }
+</script>
+
+<style>
+  .gallery {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+  .intro {
+    max-width: 44rem;
+    margin: 0 0 2.5rem;
+    font-size: 1.125rem;
+    color: var(--muted);
+  }
+  .tiles {
+    display: grid;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tile a {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    color: #fff;
+    text-decoration: none;
+    background: var(--line);
+    border-radius: 14px;
+  }
+  .tile img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .tile a:hover img,
+  .tile a:focus-visible img {
+    transform: scale(1.04);
+  }
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.15) 55%, transparent);
+  }
+  .category {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+  .overlay h2 {
+    margin: 0.25rem 0;
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    line-height: 1.15;
+  }
+  .meta {
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+  .tile.reveal {
+    opacity: 0;
+    transform: translateY(2rem);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .tile.reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+  @media (max-width: 600px) {
+    .tile a {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

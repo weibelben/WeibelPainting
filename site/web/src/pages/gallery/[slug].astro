@@ -1,0 +1,153 @@
+---
+import Base from '../../layouts/Base.astro';
+import { projects } from '../../data/projects.js';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+<Base title={project.title}>
+  <article class="project">
+    <a class="back" href="/gallery/">← Back to gallery</a>
+
+    <p class="eyebrow">{project.category} · {project.location}</p>
+    <h1>{project.title}</h1>
+
+    <img class="hero" src={project.cover} alt={project.coverAlt} />
+
+    <div class="body">
+      <div class="prose">
+        {project.description.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+
+      <dl class="facts">
+        {project.details.map(({ label, value }) => (
+          <div>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    {project.images.length > 0 && (
+      <section>
+        <h2>Project Photos</h2>
+        <ul class="photos">
+          {project.images.map(({ src, alt }) => (
+            <li>
+              <a href={src} target="_blank" rel="noopener">
+                <img src={src} alt={alt} loading="lazy" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section class="cta">
+      <h2>Have a similar project?</h2>
+      <a class="button" href="/contact/">Request an Estimate</a>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .project {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+  .back {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--brand);
+    text-decoration: none;
+  }
+  .back:hover {
+    text-decoration: underline;
+  }
+  .hero {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    margin-bottom: 2.5rem;
+    background: var(--line);
+    border-radius: 14px;
+  }
+  .body {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  .facts {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .facts dt {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .facts dd {
+    margin: 0.15rem 0 0;
+  }
+  h2 {
+    margin: 3rem 0 1.25rem;
+    font-size: 1.6rem;
+  }
+  .photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .photos a {
+    display: block;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .photos img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: var(--line);
+    transition: transform 0.4s ease;
+  }
+  .photos a:hover img {
+    transform: scale(1.03);
+  }
+  .cta {
+    margin-top: 3.5rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .cta h2 {
+    margin: 0 0 1.25rem;
+  }
+  @media (max-width: 760px) {
+    .body {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

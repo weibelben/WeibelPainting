@@ -1,0 +1,41 @@
+package main
+
+import (
+	"strings"
+	"testing"
+)
+
+func TestValidate(t *testing.T) {
+	tests := []struct {
+		name  string
+		in   Customer
+		wantErr bool
+	}{
+		{"valid minimal", Customer{Name: "Ana", Email: "ana@example.com"}, false},
+		{"trims and lowercases", Customer{Name: " Ana ", Email: " Ana@Example.com "}, false},
+		{"missing name", Customer{Email: "ana@example.com"}, true},
+		{"missing email", Customer{Name: "Ana"}, true},
+		{"bad email", Customer{Name: "Ana", Email: "not-an-email"}, true},
+		{"display name email", Customer{Name: "Ana", Email: "Ana <ana@example.com>"}, true},
+		{"name too long", Customer{Name: strings.Repeat("a", 201), Email: "ana@example.com"}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := tt.in
+			err := validate(&c)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("validate() err = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestValidateNormalizes(t *testing.T) {
+	c := Customer{Name: " Ana ", Email: " Ana@Example.com "}
+	if err := validate(&c); err != nil {
+		t.Fatal(err)
+	}
+	if c.Name != "Ana" || c.Email != "ana@example.com" {
+		t.Fatalf("got name %q email %q", c.Name, c.Email)
+	}
+}
