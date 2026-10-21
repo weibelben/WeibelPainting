@@ -1,0 +1,105 @@
+---
+import Base from './Base.astro';
+
+const { title, name, role, photo, photoAlt = `Portrait of ${name}` } = Astro.props;
+---
+<Base title={title}>
+  <article class="profile">
+    <a class="back" href="/about/">← About us</a>
+
+    <p class="eyebrow">{name}</p>
+    <h1>Professional Background</h1>
+
+    <figure class="portrait">
+      <img src={photo} alt={photoAlt} />
+      <figcaption>{name}, {role}</figcaption>
+    </figure>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    {Astro.slots.has('personal') && (
+      <section class="prose personal">
+        <h2>Personal Background</h2>
+        <slot name="personal" />
+      </section>
+    )}
+  </article>
+</Base>
+
+<style>
+  .profile {
+    display: flow-root;
+    max-width: 48rem;
+    margin: 0 auto;
+  }
+  .back {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--brand);
+    text-decoration: none;
+  }
+  .back:hover {
+    text-decoration: underline;
+  }
+  .eyebrow {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brand);
+  }
+  h1 {
+    margin: 0 0 1.5rem;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.15;
+  }
+  .portrait {
+    float: right;
+    width: min(18rem, 40%);
+    margin: 0.25rem 0 1.5rem 2rem;
+  }
+  .portrait img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background: var(--line);
+    border-radius: 12px;
+  }
+  figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    text-align: center;
+    color: var(--muted);
+  }
+  .prose :global(p) {
+    margin: 0 0 1.1rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+  .prose :global(a) {
+    color: var(--brand);
+  }
+  .personal {
+    clear: both;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+  .personal h2 {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+  }
+  @media (max-width: 640px) {
+    .portrait {
+      float: none;
+      width: 100%;
+      max-width: 20rem;
+      margin: 0 auto 1.5rem;
+    }
+  }
+</style>

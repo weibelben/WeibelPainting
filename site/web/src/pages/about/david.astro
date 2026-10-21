@@ -1,0 +1,12 @@
+---
+import Profile from '../../layouts/Profile.astro';
+---
+<Profile title="David" name="David" role="<role_here>" photo="/images/david_personal.jpg">
+  <p>[How you got started in painting and how many years you've been doing it.]</p>
+  <p>[Specialties and the kinds of projects you enjoy most.]</p>
+  <p>[Training, certifications, licensing, or notable projects.]</p>
+
+  <Fragment slot="personal">
+    <p>[Where you're from, family, and what you do outside of work.]</p>
+  </Fragment>
+</Profile>

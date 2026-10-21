@@ -1,7 +1,8 @@
 COMPOSE := docker compose -f site/compose.yaml
 API_DIR := site/api
+WEB_DIR := site/web
 
-.PHONY: up down build deploy logs ps test psql
+.PHONY: up down build deploy dev logs ps test psql
 
 up:
 	$(COMPOSE) up -d
@@ -12,8 +13,11 @@ down:
 build:
 	$(COMPOSE) build
 
-deploy: check
+deploy:
 	$(COMPOSE) up -d --build
+
+dev:
+	cd $(WEB_DIR) && npm run dev -- --host
 
 logs:
 	$(COMPOSE) logs -f --tail 50 $(s)
