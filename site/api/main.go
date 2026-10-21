@@ -31,7 +31,7 @@ func main() {
 		log.Error("connect database", "err", err)
 		os.Exit(1)
 	}
-	if err := db.AutoMigrate(&Customer{}); err != nil {
+	if err := migrate(db); err != nil {
 		log.Error("migrate", "err", err)
 		os.Exit(1)
 	}
@@ -39,7 +39,7 @@ func main() {
 	app := &App{db: db, log: log, turnstileSecret: secret}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("POST /api/customers", app.createCustomer)
+	mux.HandleFunc("POST /api/inquiries", app.createInquiry)
 	mux.HandleFunc("GET /healthz", app.healthz)
 
 	srv := &http.Server{

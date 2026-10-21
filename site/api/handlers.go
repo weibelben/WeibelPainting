@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type App struct {
@@ -15,7 +16,7 @@ type App struct {
 
 const maxFormBytes = 64 << 10
 
-func (a *App) createCustomer(w http.ResponseWriter, r *http.Request) {
+func (a *App) createInquiry(w http.ResponseWriter, r *http.Request) {
 	r.Body = http.MaxBytesReader(w, r.Body, maxFormBytes)
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid form submission.", http.StatusBadRequest)
@@ -39,7 +40,7 @@ func (a *App) createCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := Customer{
+	c := Inquiry{
 		Name:  r.PostFormValue("name"),
 		Email:  r.PostFormValue("email"),
 		Phone:  r.PostFormValue("phone"),
@@ -54,13 +55,20 @@ func (a *App) createCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := a.db.WithContext(r.Context()).Create(&c).Error; err != nil {
-		a.log.Error("insert customer", "err", err)
+	err = a.db.WithContext(r.Context()).Transaction(func(tx *gorm.DB) error {
+		customer := Customer{Email: c.Email}
+		if err := tx.Clauses(clause.OnConflict{DoNothing: true}).Create(&customer).Error; err != nil {
+			return err
+		}
+		return tx.Create(&c).Error
+	})
+	if err != nil {
+		a.log.Error("insert inquiry", "err", err)
 		http.Error(w, "Something went wrong. Please try again later.", http.StatusInternalServerError)
 		return
 	}
 
-	a.log.Info("customer created", "id", c.ID)
+	a.log.Info("inquiry created", "id", c.ID)
 	http.Redirect(w, r, "/thanks/", http.StatusSeeOther)
 }
 

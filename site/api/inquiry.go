@@ -9,6 +9,12 @@ import (
 )
 
 type Customer struct {
+	Email     string    `gorm:"primaryKey"`
+	CreatedAt time.Time `gorm:"not null"`
+	Inquiries []Inquiry `gorm:"foreignKey:Email;references:Email"`
+}
+
+type Inquiry struct {
 	ID    uint   `gorm:"primaryKey"`
 	CreatedAt time.Time `gorm:"not null"`
 	Name   string  `gorm:"not null"`
@@ -29,7 +35,7 @@ type field struct {
 	required bool
 }
 
-func validate(c *Customer) error {
+func validate(c *Inquiry) error {
 	c.Name = strings.TrimSpace(c.Name)
 	c.Email = strings.ToLower(strings.TrimSpace(c.Email))
 	c.Phone = strings.TrimSpace(c.Phone)
