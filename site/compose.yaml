@@ -1,3 +1,5 @@
+name: weibelpainting
+
 services:
  web:
   build: ./web
@@ -82,3 +84,5 @@ services:
 
 volumes:
  pgdata:
+  # Keep the volume created under the old "site" project name.
+  name: site_pgdata

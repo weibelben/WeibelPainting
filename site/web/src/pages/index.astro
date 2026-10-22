@@ -12,8 +12,23 @@ const highlights = [
     text: 'Siding and trim prepped and coated to stand up to Pacific Northwest weather.',
   },
   {
-    title: 'Cabinets & Specialty',
-    text: 'Cabinet refinishing, staining, and detail work that transforms a room.',
+    title: 'Windows and Doors',
+    text: 'Window and door installations/replacements, interior and trim and drywall.',
+  },
+];
+
+const family = [
+  {
+    title: 'We Do the Work Ourselves',
+    text: "No subcontractors and no rotating crews. The family who gives you the estimate is the family on the ladders.",
+  },
+  {
+    title: 'Owners on Every Job',
+    text: 'One of us is on site every day, so questions get answered right away and nothing slips through the cracks.',
+  },
+  {
+    title: 'Honest Referrals',
+    text: "Need work outside what we do? We're glad to recommend contractors we trust. You hire them directly, with no markup from us.",
   },
 ];
 
@@ -22,20 +37,42 @@ const recent = projects.slice(0, 3);
 <Base title="Home">
   <section class="hero">
     <div class="hero-text">
-      <p class="eyebrow">Serving the Eastside since 2015</p>
+      <p class="eyebrow">Family owned &middot; Serving the Eastside since 2015</p>
       <h1>Interior &amp; exterior painting, done with <em>care</em> and built to <em>last</em>.</h1>
       <p class="lead">
-        [A sentence speaking to the customer: a home that needs refreshing, a project you've been putting off.]
+        Whether it's a living room that's overdue for a fresh coat or peeling siding you've been
+        meaning to deal with for years, we'll make it look new again and make the process easy.
       </p>
       <p class="lead">
-        [A sentence on what you do and who you do it for: homeowners, remodels, new additions.]
+        Weibel Painting is a family-owned, family-run business serving Eastside homeowners, from
+        single-room refreshes to full remodels and new additions.
       </p>
       <div class="actions">
         <a class="button" href="/contact/">Get a Free Estimate</a>
         <a class="button button-outline" href="/services/">Our Services</a>
       </div>
     </div>
-    <img class="hero-image" src="/images/back_deck_painting_party.jpg" alt="[Describe the photo]" />
+    <img class="hero-image" src="/images/back_deck_painting_party.jpg" alt="Our family on ladders and the back deck, scraping and priming the siding of a two-story yellow farmhouse" />
+  </section>
+
+  <section class="section">
+    <p class="eyebrow">Family Owned &amp; Run</p>
+    <h2>The People You Meet are the People Who Paint</h2>
+    <div class="prose">
+      <p>
+        We're a family business, and every job is done by us. We don't hire out or hand your project
+        to subcontractors, so you always know who's working in your home, and we stand behind every
+        brushstroke.
+      </p>
+    </div>
+    <ul class="cards">
+      {family.map(({ title, text }) => (
+        <li class="card">
+          <h3>{title}</h3>
+          <p>{text}</p>
+        </li>
+      ))}
+    </ul>
   </section>
 
   <section class="section">
@@ -56,8 +93,17 @@ const recent = projects.slice(0, 3);
     <p class="eyebrow">Our Approach</p>
     <h2>Quality Starts with Preparation</h2>
     <div class="prose">
-      <p>[How you approach every job: thorough prep, quality materials, respect for the customer's home.]</p>
-      <p>[Why that matters: finishes that last, fewer touch-ups, a clean job site at the end of every day.]</p>
+      <p>
+        Most of a lasting paint job happens before the first coat goes on. We wash, scrape, sand,
+        patch, caulk, and prime until every surface is ready, then finish with quality paints chosen
+        for the job. Inside and out, we treat your home like our own: furniture moved and covered,
+        floors and landscaping protected.
+      </p>
+      <p>
+        That care pays off. Paint applied over solid prep holds up to Pacific Northwest weather,
+        needs fewer touch-ups, and keeps looking sharp for years. And because it's our name on the
+        work, we leave a clean, tidy site at the end of every day.
+      </p>
     </div>
     <a class="button button-outline" href="/about/">Meet the Team</a>
   </section>
@@ -178,7 +224,7 @@ const recent = projects.slice(0, 3);
   .more:hover {
     text-decoration: underline;
   }
-  .philosophy .prose {
+  .prose {
     max-width: 46rem;
     margin-bottom: 1.75rem;
   }
