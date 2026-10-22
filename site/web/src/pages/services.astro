@@ -9,6 +9,15 @@ const services = [
   'Deck and fence staining',
   'Color consultation',
 ];
+
+const beyondPaint = [
+  'Siding repair and replacement',
+  'Deck building and repair',
+  'Window and door replacement',
+  'Trim and finish carpentry',
+  'Kitchen and bathroom remodels',
+  'Tile installation',
+];
 ---
 <Base title="Services">
   <article class="services">
@@ -16,40 +25,84 @@ const services = [
     <h1>Painting Services</h1>
 
     <div class="prose">
-      <p>[Who you work with: homeowners, property managers, builders, and the area you serve.]</p>
-      <p>[What sets you apart: licensed and insured, quality materials, clean job sites.]</p>
+      <p>
+        We work with homeowners across the Eastside, from a single room that needs a fresh coat
+        to a whole-house exterior or a full remodel. Painting is the heart of what we do, and the
+        trades around it are where we really shine.
+      </p>
+      <p>
+        We're a family business, and every job is done by us: no subcontractors, no rotating
+        crews. We're licensed, bonded, and insured, we use quality materials, and we leave your
+        home clean at the end of every day.
+      </p>
     </div>
 
     <section>
       <h2>Our Services</h2>
+      <h3>Painting</h3>
       <ul class="service-list">
         {services.map((service) => <li>{service}</li>)}
       </ul>
+      <h3>Beyond Paint</h3>
+      <ul class="service-list">
+        {beyondPaint.map((service) => <li>{service}</li>)}
+      </ul>
+      <p class="note">
+        For electrical and plumbing, we're happy to recommend contractors we trust. You hire them
+        directly, with no markup from us.
+      </p>
     </section>
 
     <figure class="banner">
-      <img src="<path_to_photo_here>" alt="[Describe the photo]" />
-      <figcaption>Prep · Paint · Protect</figcaption>
+      <img
+        src="/images/projects/newcastle_mudroom/siding_over_insulation.jpg"
+        alt="A mudroom addition in progress, with new yellow lap siding going up over house wrap and insulation"
+      />
+      <figcaption>Prep · Build · Paint</figcaption>
     </figure>
 
     <section class="prose">
       <h2>Our Process</h2>
-      <p>[How an estimate works: site visit, measurements, written quote.]</p>
-      <p>[How you prep surfaces and choose materials, and why it matters for how long the finish lasts.]</p>
+      <p>
+        Every project starts with a free estimate. We'll visit your home, walk through what you
+        have in mind, take measurements, and point out anything we notice, like rot, peeling, or
+        water damage, that should be handled first. Then we'll send you a clear written quote.
+      </p>
+      <p>
+        Once the work starts, prep comes first. We wash, scrape, sand, patch, caulk, and prime
+        until every surface is ready, and we choose paints and materials suited to each surface
+        and to Pacific Northwest weather. That groundwork is what keeps a finish looking good for
+        years instead of seasons.
+      </p>
     </section>
 
     <section class="prose">
       <h2>What to Expect</h2>
-      <p>[A sentence on how you keep customers informed throughout a project.]</p>
+      <p>
+        Since you're working with the owners directly, you'll always know who to call. We'll keep
+        you posted from the first visit to the final walkthrough.
+      </p>
 
       <h3>Before We Start</h3>
-      <p>[Color selection, scheduling, moving furniture, protecting floors and landscaping.]</p>
+      <p>
+        We'll help you choose colors and finishes and settle on a schedule that works for you.
+        On the first day, we move and cover furniture and protect floors, fixtures, and
+        landscaping before any work begins.
+      </p>
 
       <h3>During the Project</h3>
-      <p>[Daily schedule, communication, keeping the work area clean.]</p>
+      <p>
+        We keep regular working hours and let you know what's planned for each day. If we find
+        something unexpected, we'll talk it through with you before going further. At the end of
+        each day, we clean up and leave your home livable.
+      </p>
 
       <h3>After We Finish</h3>
-      <p>[Final walkthrough, touch-ups, leftover paint, warranty.]</p>
+      <p>
+        We'll do a final walkthrough together and take care of any touch-ups on the spot. We
+        leave labeled leftover paint for future touch-ups, and if something isn't right down the
+        road, give us a call.
+      </p>
     </section>
 
     <section class="cta">
@@ -95,6 +148,10 @@ const services = [
     height: 0.5rem;
     background: var(--brand);
     border-radius: 50%;
+  }
+  .note {
+    margin: 1.5rem 0 0;
+    color: var(--muted);
   }
   .banner {
     margin: 3rem 0 0;
