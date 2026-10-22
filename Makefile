@@ -2,7 +2,7 @@ COMPOSE := docker compose -f site/compose.yaml
 API_DIR := site/api
 WEB_DIR := site/web
 
-.PHONY: up down build deploy dev logs ps test psql
+.PHONY: up down build deploy deploy-web dev logs ps test psql
 
 up:
 	$(COMPOSE) up -d
@@ -15,6 +15,10 @@ build:
 
 deploy:
 	$(COMPOSE) up -d --build
+
+# Rebuild and restart only the frontend, leaving the API and database running.
+deploy-web:
+	$(COMPOSE) up -d --build --no-deps web
 
 dev:
 	cd $(WEB_DIR) && npm run dev -- --host
