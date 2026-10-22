@@ -47,11 +47,11 @@ const turnstileSiteKey = import.meta.env.DEV
           </div>
           <div class="field">
             <label for="state">State</label>
-            <input id="state" name="state" maxlength="50" autocomplete="address-level1" />
+            <input id="state" name="state" value="WA" readonly />
           </div>
           <div class="field">
             <label for="zip">ZIP</label>
-            <input id="zip" name="zip" maxlength="20" inputmode="numeric" autocomplete="postal-code" />
+            <input id="zip" name="zip" maxlength="5" pattern="[0-9]{5}" title="5-digit ZIP code" inputmode="numeric" autocomplete="postal-code" />
           </div>
         </div>
 
@@ -158,6 +158,10 @@ const turnstileSiteKey = import.meta.env.DEV
     background: #fff;
     border: 1px solid var(--border);
     border-radius: 8px;
+  }
+  input[readonly] {
+    color: var(--muted);
+    background: #f3f5f7;
   }
   input:focus,
   textarea:focus {

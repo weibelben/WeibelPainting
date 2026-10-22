@@ -54,8 +54,12 @@ func mailerFromEnv() (*mailer, error) {
 	return m, nil
 }
 
-func (m *mailer) sendInquiry(c *Inquiry) error {
-	subject, body := inquiryEmail(c)
+// maxEmailsPerDay caps notification emails in any rolling 24 hours. The last
+// one allowed says so, and inquiries after it are saved but not emailed.
+const maxEmailsPerDay = 5
+
+func (m *mailer) sendInquiry(c *Inquiry, last bool) error {
+	subject, body := inquiryEmail(c, last)
 	msg, err := m.message(subject, body, c.Email, time.Now())
 	if err != nil {
 		return err
@@ -63,10 +67,17 @@ func (m *mailer) sendInquiry(c *Inquiry) error {
 	return m.send(msg)
 }
 
-func inquiryEmail(c *Inquiry) (subject, body string) {
+func inquiryEmail(c *Inquiry, last bool) (subject, body string) {
 	subject = "New Weibel Painting inquiry from " + c.Name
 
 	var b strings.Builder
+	if last {
+		subject = "Multiple new Weibel Painting inquiries: email notifications paused"
+		fmt.Fprintf(&b, "You've received %d inquiries in the last 24 hours. To protect your inbox,\n", maxEmailsPerDay)
+		b.WriteString("new inquiries are still being saved but won't be emailed until fewer\n")
+		fmt.Fprintf(&b, "than %d have arrived in the past 24 hours. Check the inquiries table for\n", maxEmailsPerDay)
+		b.WriteString("anything you missed.\n\n")
+	}
 	fmt.Fprintf(&b, "Inquiry #%d\n\n", c.ID)
 	fmt.Fprintf(&b, "Name:    %s\n", c.Name)
 	fmt.Fprintf(&b, "Email:   %s\n", c.Email)

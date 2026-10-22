@@ -45,7 +45,13 @@ func main() {
 		log.Warn("SMTP_HOST not set; inquiry emails disabled")
 	}
 
-	app := &App{db: db, log: log, turnstileSecret: secret, mailer: mailer}
+	app := &App{
+		db:              db,
+		log:             log,
+		turnstileSecret: secret,
+		mailer:          mailer,
+		limiter:         newRateLimiter(5, time.Hour),
+	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /api/inquiries", app.createInquiry)

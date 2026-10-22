@@ -10,7 +10,7 @@ import (
 
 func TestInquiryEmail(t *testing.T) {
 	c := Inquiry{ID: 7, Name: "Ana", Email: "ana@example.com", City: "Austin", State: "TX", Zip: "78701", Message: "Paint the kitchen"}
-	subject, body := inquiryEmail(&c)
+	subject, body := inquiryEmail(&c, false)
 	if subject != "New Weibel Painting inquiry from Ana" {
 		t.Fatalf("subject = %q", subject)
 	}
@@ -21,6 +21,19 @@ func TestInquiryEmail(t *testing.T) {
 	}
 	if strings.Contains(body, "Phone:") {
 		t.Errorf("body includes empty phone:\n%s", body)
+	}
+}
+
+func TestInquiryEmailLast(t *testing.T) {
+	c := Inquiry{ID: 9, Name: "Ana", Email: "ana@example.com", Message: "Paint the kitchen"}
+	subject, body := inquiryEmail(&c, true)
+	if !strings.HasPrefix(subject, "Multiple new Weibel Painting inquiries") {
+		t.Fatalf("subject = %q", subject)
+	}
+	for _, want := range []string{"5 inquiries in the last 24 hours", "Inquiry #9", "Paint the kitchen"} {
+		if !strings.Contains(body, want) {
+			t.Errorf("body missing %q:\n%s", want, body)
+		}
 	}
 }
 

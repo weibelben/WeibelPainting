@@ -23,6 +23,12 @@ func TestValidate(t *testing.T) {
 		{"missing message", Inquiry{Name: "Ana", Email: "ana@example.com"}, true},
 		{"blank message", Inquiry{Name: "Ana", Email: "ana@example.com", Message: "   "}, true},
 		{"name at max", Inquiry{Name: strings.Repeat("a", 199), Email: "ana@example.com", Message: "Paint the kitchen"}, false},
+		{"zip 5 digits", Inquiry{Name: "Ana", Email: "ana@example.com", Zip: "98101", Message: "Paint the kitchen"}, false},
+		{"zip too short", Inquiry{Name: "Ana", Email: "ana@example.com", Zip: "9810", Message: "Paint the kitchen"}, true},
+		{"zip plus four", Inquiry{Name: "Ana", Email: "ana@example.com", Zip: "98101-1234", Message: "Paint the kitchen"}, true},
+		{"zip letters", Inquiry{Name: "Ana", Email: "ana@example.com", Zip: "9810a", Message: "Paint the kitchen"}, true},
+		{"state WA", Inquiry{Name: "Ana", Email: "ana@example.com", State: "wa", Message: "Paint the kitchen"}, false},
+		{"state other", Inquiry{Name: "Ana", Email: "ana@example.com", State: "OR", Message: "Paint the kitchen"}, true},
 		{"name too long", Inquiry{Name: strings.Repeat("a", 200), Email: "ana@example.com", Message: "Paint the kitchen"}, true},
 	}
 	for _, tt := range tests {
@@ -43,5 +49,15 @@ func TestValidateNormalizes(t *testing.T) {
 	}
 	if c.Name != "Ana" || c.Email != "ana@example.com" {
 		t.Fatalf("got name %q email %q", c.Name, c.Email)
+	}
+}
+
+func TestValidateDefaultsStateToWA(t *testing.T) {
+	c := Inquiry{Name: "Ana", Email: "ana@example.com", Message: "Paint the kitchen"}
+	if err := validate(&c); err != nil {
+		t.Fatal(err)
+	}
+	if c.State != "WA" {
+		t.Fatalf("State = %q, want WA", c.State)
 	}
 }
