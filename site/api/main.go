@@ -31,15 +31,30 @@ func main() {
 		log.Error("connect database", "err", err)
 		os.Exit(1)
 	}
-	if err := db.AutoMigrate(&Customer{}); err != nil {
+	if err := migrate(db); err != nil {
 		log.Error("migrate", "err", err)
 		os.Exit(1)
 	}
 
-	app := &App{db: db, log: log, turnstileSecret: secret}
+	mailer, err := mailerFromEnv()
+	if err != nil {
+		log.Error("email config", "err", err)
+		os.Exit(1)
+	}
+	if mailer == nil {
+		log.Warn("SMTP_HOST not set; inquiry emails disabled")
+	}
+
+	app := &App{
+		db:              db,
+		log:             log,
+		turnstileSecret: secret,
+		mailer:          mailer,
+		limiter:         newRateLimiter(5, time.Hour),
+	}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("POST /api/customers", app.createCustomer)
+	mux.HandleFunc("POST /api/inquiries", app.createInquiry)
 	mux.HandleFunc("GET /healthz", app.healthz)
 
 	srv := &http.Server{
@@ -68,4 +83,5 @@ func main() {
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Error("shutdown", "err", err)
 	}
+	app.notifications.Wait()
 }

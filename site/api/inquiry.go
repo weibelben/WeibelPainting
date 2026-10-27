@@ -9,6 +9,12 @@ import (
 )
 
 type Customer struct {
+	Email     string    `gorm:"primaryKey"`
+	CreatedAt time.Time `gorm:"not null"`
+	Inquiries []Inquiry `gorm:"foreignKey:Email;references:Email"`
+}
+
+type Inquiry struct {
 	ID    uint   `gorm:"primaryKey"`
 	CreatedAt time.Time `gorm:"not null"`
 	Name   string  `gorm:"not null"`
@@ -29,13 +35,13 @@ type field struct {
 	required bool
 }
 
-func validate(c *Customer) error {
+func validate(c *Inquiry) error {
 	c.Name = strings.TrimSpace(c.Name)
 	c.Email = strings.ToLower(strings.TrimSpace(c.Email))
 	c.Phone = strings.TrimSpace(c.Phone)
 	c.Street = strings.TrimSpace(c.Street)
 	c.City = strings.TrimSpace(c.City)
-	c.State = strings.TrimSpace(c.State)
+	c.State = strings.ToUpper(strings.TrimSpace(c.State))
 	c.Zip = strings.TrimSpace(c.Zip)
 	c.Message = strings.TrimSpace(c.Message)
 
@@ -45,8 +51,8 @@ func validate(c *Customer) error {
 		{c.Phone, 40, false},
 		{c.Street, 200, false},
 		{c.City, 100, false},
-		{c.State, 50, false},
-		{c.Zip, 20, false},
+		{c.State, 2, false},
+		{c.Zip, 5, false},
 		{c.Message, 4000, true},
 	}
 	for _, f := range fields {
@@ -56,6 +62,15 @@ func validate(c *Customer) error {
 		if utf8.RuneCountInString(f.value) > f.max {
 			return errInvalid
 		}
+	}
+
+	// We only serve Washington, so the form's state field is fixed to WA.
+	if c.State != "" && c.State != "WA" {
+		return errInvalid
+	}
+	c.State = "WA"
+	if c.Zip != "" && !isDigits(c.Zip, 5) {
+		return errInvalid
 	}
 
 	addr, err := mail.ParseAddress(c.Email)
@@ -68,4 +83,16 @@ func validate(c *Customer) error {
 		return errInvalid
 	}
 	return nil
+}
+
+func isDigits(s string, n int) bool {
+	if len(s) != n {
+		return false
+	}
+	for _, r := range s {
+		if r < '0' || r > '9' {
+			return false
+		}
+	}
+	return true
 }
